@@ -13,7 +13,7 @@ public class Observer : MonoBehaviour
     // The maximum angle in which the ghost can see the player.
     public float detectionAngle = 60f; // NEW.
 
-    // Gargoyle rotation settings. NEW.
+    // Gargoyle rotation settings for lerp. NEW.
     public bool useLerpRotation = false;
     public Transform rotationTarget; // Assign gargoyle rotation target in the Inspector.
     public float leftAngle = -45f; // Left rotation angle for Lerp rotation.
@@ -41,13 +41,33 @@ public class Observer : MonoBehaviour
 
     void Update ()
     {
+
+        // Handle Lerp rotation for Gargoyles. NEW.
+        if (useLerpRotation && rotationTarget != null) {
+            lerpTime += Time.deltaTime * rotationSpeed; // Increment lerp time based on speed.
+            float angle = Mathf.Lerp(leftAngle, rightAngle, Mathf.SmoothStep(0f, 1f, lerpTime)); // Lerp between left and right angles. Updated to use SmoothStep for smoother transition.
+            rotationTarget.localRotation = UnityEngine.Quaternion.Euler(0f, angle, 0f); // Apply rotation to the target.
+
+            if (lerpTime >= 1f) // If lerp time reaches 1, reverse the direction.
+            {
+                lerpTime = 0f; // Reset lerp time.
+                (leftAngle, rightAngle) = (rightAngle, leftAngle); // Swap angles for next rotation.
+            }
+        }
+
+
         // Only run vision check if the player is within range.
         if (m_IsPlayerInRange) { // NEW.
+
+            // Use rotationTarget forward if available (for gargoyle), else use whole object forward (ghost).
+            UnityEngine.Vector3 forwardDirection = rotationTarget != null ? rotationTarget.forward : transform.forward; // NEW.
+
+
             // Get a normalized direction vector from the ghost to the player.
             UnityEngine.Vector3 toPlayer = (player.position - transform.position).normalized; // NEW.
 
             // Dot product measures how closely the ghost is facing the player.
-            float dot = UnityEngine.Vector3.Dot (transform.forward, toPlayer); // NEW.
+            float dot = UnityEngine.Vector3.Dot (forwardDirection, toPlayer); // NEW. Updated for gargoyle.
 
             // Convert detection angle from degrees to a dot product value.
             float dotValue = Mathf.Cos (detectionAngle * Mathf.Deg2Rad); // NEW.
@@ -78,11 +98,15 @@ public class Observer : MonoBehaviour
     {
         // Draw forward direction in green.
         Gizmos.color = UnityEngine.Color.green;
-        Gizmos.DrawRay (transform.position, transform.forward * 2f);
+
+        // For gargoyle, use rotationTarget forward if available, else use whole object forward (ghost).
+        UnityEngine.Vector3 forwardDirection = rotationTarget != null ? rotationTarget.forward : transform.forward;
+
+        Gizmos.DrawRay (transform.position, forwardDirection * 2f);
 
         // Draw vision cone boundaries in yellow.
-        UnityEngine.Vector3 rightBoundary = UnityEngine.Quaternion.Euler (0, detectionAngle, 0f) * transform.forward;
-        UnityEngine.Vector3 leftBoundary = UnityEngine.Quaternion.Euler (0, -detectionAngle, 0f) * transform.forward;
+        UnityEngine.Vector3 rightBoundary = UnityEngine.Quaternion.Euler (0, detectionAngle, 0f) * forwardDirection;
+        UnityEngine.Vector3 leftBoundary = UnityEngine.Quaternion.Euler (0, -detectionAngle, 0f) * forwardDirection;
 
         Gizmos.color = UnityEngine.Color.yellow;
         Gizmos.DrawRay (transform.position, rightBoundary * 2f);
