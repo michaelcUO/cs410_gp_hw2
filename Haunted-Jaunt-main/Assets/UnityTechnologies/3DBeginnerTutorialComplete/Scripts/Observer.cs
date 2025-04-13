@@ -10,6 +10,9 @@ public class Observer : MonoBehaviour
 
     bool m_IsPlayerInRange;
 
+    // Particle effect to show when the player is detected.
+    public GameObject alertEffectPrefab; // NEW.
+
     // The maximum angle in which the ghost can see the player.
     public float detectionAngle = 60f; // NEW.
 
@@ -27,6 +30,7 @@ public class Observer : MonoBehaviour
     {
         if (other.transform == player)
         {
+            Debug.Log(gameObject.name + " has detected the player!"); // Log message when player is detected for debugging.
             m_IsPlayerInRange = true;
         }
     }
@@ -71,6 +75,7 @@ public class Observer : MonoBehaviour
 
             // Convert detection angle from degrees to a dot product value.
             float dotValue = Mathf.Cos (detectionAngle * Mathf.Deg2Rad); // NEW.
+            Debug.Log ("Dot value: " + dot); // Log the dot value for debugging.
 
             // If player is within the vision cone (dot product is greater than the dot value).
             if (dot > dotValue) // NEW.
@@ -80,11 +85,14 @@ public class Observer : MonoBehaviour
                 Ray ray = new Ray (transform.position, toPlayer);
                 RaycastHit raycastHit;
                 
-                if (Physics.Raycast (ray, out raycastHit))
+                Debug.DrawRay(transform.position, toPlayer * 20f, Color.red);
+                if (Physics.Raycast (ray, out raycastHit, 20f))
                 {
+                    Debug.Log("Raycast hit: " + raycastHit.collider.name); // Log the name of the object hit by the raycast for debugging.
                     // If the raycast hit the player, call CaughtPlayer.
                     if (raycastHit.collider.transform == player)
                     {
+                        Instantiate(alertEffectPrefab, player.position + UnityEngine.Vector3.up * 1.5f, UnityEngine.Quaternion.identity); // NEW. Instantiate the alert effect prefab at the player's position. Update the position to be above the player.
                         gameEnding.CaughtPlayer ();
                     }
                 }

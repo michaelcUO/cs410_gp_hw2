@@ -309,7 +309,7 @@ PrefabInstance:
     - target: {fileID: 1663644928278714035, guid: 8a6f7024e2eb90140bdf570ef653bac8,
         type: 3}
       propertyPath: rotationSpeed
-      value: 0.5
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 1663644928278714035, guid: 8a6f7024e2eb90140bdf570ef653bac8,
         type: 3}
@@ -326,10 +326,16 @@ PrefabInstance:
       propertyPath: useLerpRotation
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1663644928278714035, guid: 8a6f7024e2eb90140bdf570ef653bac8,
+        type: 3}
+      propertyPath: alertEffectPrefab
+      value: 
+      objectReference: {fileID: 2329843480265833416, guid: 4b6001e4b41e54664a35b4126a89019f,
+        type: 3}
     - target: {fileID: 4387422829284133010, guid: 8a6f7024e2eb90140bdf570ef653bac8,
         type: 3}
       propertyPath: m_Radius
-      value: 0
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 4903280789943914309, guid: 8a6f7024e2eb90140bdf570ef653bac8,
         type: 3}
