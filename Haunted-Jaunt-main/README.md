@@ -2,7 +2,9 @@
 
 ## Team Members
 
-| Michael Cheung | Implemented all new gameplay elements including dot product detection, lerp-based gargoyle rotation, particle effects on detection, and sound triggers. Integrated new gameplay logic and tested interactions in Unity.|
+| Michael Cheung | 
+
+Implemented all new gameplay elements including dot product detection, lerp-based gargoyle rotation, particle effects on detection, and sound triggers. Integrated new gameplay logic and tested interactions in Unity.|
 
 ---
 
@@ -26,7 +28,7 @@ To create tension and increase the challenge, I implemented linear interpolation
 ---
 
 ### Particle Effect (Detection Burst Effect)
-To make enemy detection feel more dramatic and immersive, I created a particle effect that erupts from the player when spotted.
+To make enemy detection feel more dramatic, I created a red particle effect that erupts from the player when spotted.
 
 - The particle effect, a burst of red ghostly energy, spawns directly above the player when caught by either a ghost or a gargoyle.
 - This is handled in `Observer.cs` by instantiating a `GhostAlertEffect` prefab when the player is detected.

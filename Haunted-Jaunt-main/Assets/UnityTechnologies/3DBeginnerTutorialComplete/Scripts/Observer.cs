@@ -66,7 +66,6 @@ public class Observer : MonoBehaviour
             // Use rotationTarget forward if available (for gargoyle), else use whole object forward (ghost).
             UnityEngine.Vector3 forwardDirection = rotationTarget != null ? rotationTarget.forward : transform.forward; // NEW.
 
-
             // Get a normalized direction vector from the ghost to the player.
             UnityEngine.Vector3 toPlayer = (player.position - transform.position).normalized; // NEW.
 
@@ -101,6 +100,7 @@ public class Observer : MonoBehaviour
         
     }
 
+    // Visualization for easy debugging in the Scene view.
     // Draw visualization of the detection angle in the Scene view for debugging.
     void OnDrawGizmos() // NEW.
     {
